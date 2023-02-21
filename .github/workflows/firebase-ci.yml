@@ -13,22 +13,19 @@ jobs:
       - name: Install dependencies
         run: npm install
         working-directory: test
-      # - name: Get Library Versions For Binary Caching
-      #   id: cache-settings
-      #   run: |
-      #     echo "{firebase-tools}={$(yarn list -s --depth=0 --pattern firebase-tools | tail -n 1 | sed 's/.*@//g')}" >> $GITHUB_OUTPUT
-      #     echo "{firebase-tools}={$(npm list -s --depth=0 | grep firebase-tools | tail -n 1 | sed 's/.*@//g')}" >> $GITHUB_OUTPUT
-      # - name: Cache firebase emulators
-      #   uses: actions/cache@v2
-      #   with:
-      #     path: ~/.cache/firebase/emulators
-      #     key: ${{ runner.os }}-firebase-${{ steps.cache-settings.outputs.firebase-tools }}
+      - name: Get Library Versions For Binary Caching
+        id: cache-settings
+        run: |
+          echo "{firebase-tools}={$(yarn list -s --depth=0 --pattern firebase-tools | tail -n 1 | sed 's/.*@//g')}" >> $GITHUB_OUTPUT
+          echo "{firebase-tools}={$(npm list -s --depth=0 | grep firebase-tools | tail -n 1 | sed 's/.*@//g')}" >> $GITHUB_OUTPUT
+      - name: Cache firebase emulators
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/firebase/emulators
+          key: ${{ runner.os }}-firebase-${{ steps.cache-settings.outputs.firebase-tools }}
       - name: Run Transpiler
         run: npm install --save firebase-functions@latest; npm run build
         working-directory: functions
-      # - name: Log in firebase
-      #   run: firebase login --token "$FIREBASE_TOKEN"
-      #   working-directory: ./
       - name: Run all the tests
         working-directory: test
         run: firebase emulators:exec --token "$FIREBASE_TOKEN" --project booksreader-e1dd5 'npm test'
