@@ -11,7 +11,7 @@ jobs:
       - name: Install Firebase Emulator
         run: npm install -g firebase-tools
       - name: Install dependencies
-        run: npm install
+        run: npm install; yarn install;
         working-directory: test
       - name: Get Library Versions For Binary Caching
         id: cache-settings
