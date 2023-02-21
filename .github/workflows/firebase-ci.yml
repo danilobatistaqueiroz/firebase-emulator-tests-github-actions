@@ -3,7 +3,8 @@ jobs:
   emulator_test:
     name: Run all tests using Firebase Emulator
     runs-on: ubuntu-latest
-  steps:
+    steps:
+      - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
           node-version: "16.17.0"
@@ -17,7 +18,6 @@ jobs:
       #   run: |
       #     echo "{firebase-tools}={$(yarn list -s --depth=0 --pattern firebase-tools | tail -n 1 | sed 's/.*@//g')}" >> $GITHUB_OUTPUT
       #     echo "{firebase-tools}={$(npm list -s --depth=0 | grep firebase-tools | tail -n 1 | sed 's/.*@//g')}" >> $GITHUB_OUTPUT
-      # - uses: actions/checkout@v2
       # - name: Cache firebase emulators
       #   uses: actions/cache@v2
       #   with:
