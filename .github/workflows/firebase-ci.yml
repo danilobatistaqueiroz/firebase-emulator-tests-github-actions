@@ -4,17 +4,6 @@ jobs:
     name: Run all tests using Firebase Emulator
     runs-on: ubuntu-latest
   steps:
-      - name: Get Library Versions For Binary Caching
-          id: cache-settings
-          run: |
-            echo "{firebase-tools}={$(yarn list -s --depth=0 --pattern firebase-tools | tail -n 1 | sed 's/.*@//g')}" >> $GITHUB_OUTPUT
-            echo "{firebase-tools}={$(npm list -s --depth=0 | grep firebase-tools | tail -n 1 | sed 's/.*@//g')}" >> $GITHUB_OUTPUT
-      - uses: actions/checkout@v2
-      - name: Cache firebase emulators
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/firebase/emulators
-          key: ${{ runner.os }}-firebase-${{ steps.cache-settings.outputs.firebase-tools }}
       - uses: actions/setup-node@v1
         with:
           node-version: "16.17.0"
@@ -23,6 +12,17 @@ jobs:
       - name: Install dependencies
         run: npm install
         working-directory: test
+      - name: Get Library Versions For Binary Caching
+        id: cache-settings
+        run: |
+          echo "{firebase-tools}={$(yarn list -s --depth=0 --pattern firebase-tools | tail -n 1 | sed 's/.*@//g')}" >> $GITHUB_OUTPUT
+          echo "{firebase-tools}={$(npm list -s --depth=0 | grep firebase-tools | tail -n 1 | sed 's/.*@//g')}" >> $GITHUB_OUTPUT
+      - uses: actions/checkout@v2
+      - name: Cache firebase emulators
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/firebase/emulators
+          key: ${{ runner.os }}-firebase-${{ steps.cache-settings.outputs.firebase-tools }}
       - name: Run Transpiler
         run: npm install --save firebase-functions@latest; npm run build
         working-directory: functions
