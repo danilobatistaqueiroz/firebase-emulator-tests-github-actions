@@ -5,6 +5,7 @@ import { PubSub } from '@google-cloud/pubsub'
 // // https://firebase.google.com/docs/functions/typescript
 //
 export const randomNumber = functions.https.onRequest((request, response) => {
+  console.log('running randomNumber');
   functions.logger.info("Hello logs!", {structuredData: true});
   const number = Math.round(Math.random() * 100);
   response.send(`Hello from Firebase! ${number}`);
